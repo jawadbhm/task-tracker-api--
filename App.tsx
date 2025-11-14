@@ -1,14 +1,12 @@
-
 import React, { useState, useCallback } from 'react';
 import { Task } from './types';
-import { useLocalStorage } from './hooks/useLocalStorage';
 import TaskList from './components/TaskList';
 import AddTaskForm from './components/AddTaskForm';
 import EditTaskModal from './components/EditTaskModal';
 import { TaskIcon } from './components/Icons';
 
 const App: React.FC = () => {
-    const [tasks, setTasks] = useLocalStorage<Task[]>('tasks', []);
+    const [tasks, setTasks] = useState<Task[]>([]);
     const [editingTask, setEditingTask] = useState<Task | null>(null);
 
     const handleAddTask = useCallback((title: string, description: string) => {
@@ -19,7 +17,7 @@ const App: React.FC = () => {
             completed: false,
         };
         setTasks(prevTasks => [newTask, ...prevTasks]);
-    }, [setTasks]);
+    }, []);
 
     const handleToggleTask = useCallback((id: string) => {
         setTasks(prevTasks =>
@@ -27,11 +25,11 @@ const App: React.FC = () => {
                 task.id === id ? { ...task, completed: !task.completed } : task
             )
         );
-    }, [setTasks]);
+    }, []);
 
     const handleDeleteTask = useCallback((id: string) => {
         setTasks(prevTasks => prevTasks.filter(task => task.id !== id));
-    }, [setTasks]);
+    }, []);
 
     const handleUpdateTask = useCallback((updatedTask: Task) => {
         setTasks(prevTasks =>
@@ -40,7 +38,7 @@ const App: React.FC = () => {
             )
         );
         setEditingTask(null);
-    }, [setTasks]);
+    }, []);
 
     const openEditModal = (task: Task) => {
         setEditingTask(task);
